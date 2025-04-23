@@ -12,42 +12,37 @@ exit(98);
 }
 
 /**
- * execute_command - Executes the command entered by the user.
- * @args: The command arguments.
- * @input: original input string
+ * execute_command - Executes a command in a child process
+ * @array_command: An array of command arguments
+ * @nbr_command: The index of the command for error printing
  */
-void execute_command(char **args, char *input)
+void execute_command(char **array_command, int nbr_command)
 {
-pid_t childPid;
-int status;
+pid_t pid;
+char *command_path;
 
-if (access(args[0], X_OK) != 0)
-_err(args);
-
-childPid = fork();
-
-if (childPid == -1)
+pid = fork();
+if (pid == -1)
 {
 perror("fork");
-free(input);
-free(args[0]);
+return;
+}
+
+if (pid == 0)
+{
+command_path = gpath(array_command[0]);
+if (command_path == NULL)
+{
+fprintf(stderr, "./shell: %d: %s: not found\n",
+nbr_command, array_command[0]);
+free_args(array_command);
 exit(EXIT_FAILURE);
 }
-
-if (childPid == 0)
-{
-execve(args[0], args, environ);
-perror(args[0]);
-free(args[0]);
+execve(command_path, array_command, environ);
+perror("execve");
+free_args(array_command);
 exit(EXIT_FAILURE);
 }
-
-wait(&status);
-
-if (WIFEXITED(status))
-{
-free(args[0]);
-free(input);
-exit(WEXITSTATUS(status));
-}
+else
+wait(NULL);
 }
