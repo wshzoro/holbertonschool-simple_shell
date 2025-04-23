@@ -53,29 +53,3 @@ args[i] = NULL;
 
 return (args);
 }
-
-/**
- * handle_builtin - Check and handle built-in commands
- * @args: The argument array
- * Return: 1 if built-in was handled, 0 otherwise
- */
-int handle_builtin(char **args)
-{
-if (args[0] == NULL)
-return (1);
-
-if (strcmp(args[0], "exit") == 0)
-{
-free_args(args);
-exit(0);
-}
-
-if (strcmp(args[0], "env") == 0)
-{
-print_env(); /* Ta fonction d'affichage de l'env */
-free_args(args);
-return (1);
-}
-
-return (0);
-}
