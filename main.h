@@ -6,15 +6,17 @@
 #include <unistd.h>
 #include <string.h>
 
-extern char environ;
+extern char **environ;
 
-void printEnv(void);
 void _err(char *args[]);
-void exec(char args, char input);
-charpath(char input);
 void display_prompt(void);
 void tokenize(char *input, char *args[]);
-int _strcmp(const chars1, const char s2);
-char **parse_input(charinput);
+char **parse_input(char *input);
+int _strcmp(const char *s1, const char *s2);
+void execute_command(char **args, char *input);
+void print_env(void);
+char *handle_path(char *input);
+
+
 
 #endif

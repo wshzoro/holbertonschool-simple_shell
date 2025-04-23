@@ -4,7 +4,7 @@
  * @input: User input
  * Return: The
  */
-char *path(char *input)
+char *handle_path(char *input)
 {
 char *token, *result;
 int i = 0;

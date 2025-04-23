@@ -30,7 +30,7 @@ if (childPid == -1)
 {
 perror("fork");
 free(input);
-free(args[0]);
+free(args);
 exit(EXIT_FAILURE);
 }
 
@@ -46,7 +46,7 @@ wait(&status);
 
 if (WIFEXITED(status))
 {
-free(args[0]);
+free(args);
 free(input);
 exit(WEXITSTATUS(status));
 }

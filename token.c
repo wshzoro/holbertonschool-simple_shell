@@ -9,6 +9,7 @@ void tokenize(char *input, char *args[])
 {
 char *token;
 unsigned int i = 0;
+char *path;
 
 token = strtok(input, " ");
 
@@ -25,7 +26,7 @@ _exit(0);
 
 if (strcmp(args[0], "env") == 0)
 {
-printEnv();
+print_env();
 return;
 }
 
@@ -35,7 +36,7 @@ free(args[0]);
 _exit(0);
 }
 
-char *path = handle_path(args[0]);
+path = handle_path(args[0]);
 if (path != NULL)
 {
 execve(path, args, environ);

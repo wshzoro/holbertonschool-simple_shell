@@ -61,7 +61,7 @@ continue;
 
 args = parse_input(line);
 if (args[0] != NULL)
-execute_command(args);
+execute_command(args, line);
 
 free(args);
 
