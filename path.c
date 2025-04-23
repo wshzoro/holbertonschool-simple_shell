@@ -1,6 +1,6 @@
 #include "main.h"
 /**
- * path - Finds the path of the command to execute
+ * handle_path - Finds the path of the command to execute
  * @input: User input
  * Return: The
  */

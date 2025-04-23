@@ -1,4 +1,6 @@
 #include "main.h"
+#include <sys/wait.h>
+
 /**
  * _err - handles command not found errors
  * @args: arguments to check
@@ -21,33 +23,29 @@ void execute_command(char **args, char *input)
 pid_t childPid;
 int status;
 
-if (access(args[0], X_OK) != 0)
-_err(args);
-
 childPid = fork();
 
 if (childPid == -1)
 {
 perror("fork");
 free(input);
-free(args);
 exit(EXIT_FAILURE);
 }
 
 if (childPid == 0)
 {
-execve(args[0], args, environ);
-perror(args[0]);
-free(args[0]);
+if (execve(args[0], args, environ) == -1)
+{
+_err(args);
+}
 exit(EXIT_FAILURE);
 }
-
-wait(&status);
-
-if (WIFEXITED(status))
+else
 {
-free(args);
-free(input);
-exit(WEXITSTATUS(status));
+waitpid(childPid, &status, 0);
+}
+if (args[0] && args[0] != NULL)
+{
+free(args[0]);
 }
 }

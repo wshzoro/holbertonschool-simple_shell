@@ -32,7 +32,7 @@ while (1)
 {
 if (isatty(STDIN_FILENO))
 {
-printf("$ ");
+printf("($) ");
 fflush(stdout);
 }
 
