@@ -40,4 +40,3 @@ return (*env + len + 1);
 }
 return (NULL);
 }
-
