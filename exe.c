@@ -33,7 +33,7 @@ if (pid == 0)
 command_path = gpath(array_command[0]);
 if (command_path == NULL)
 {
-fprintf(stderr, "./shell: %d: %s: not found\n",
+fprintf(stderr, "./hsh: %d: %s: not found\n",
 nbr_command, array_command[0]);
 free_args(array_command);
 exit(EXIT_FAILURE);
