@@ -10,7 +10,7 @@ int spacesCheck(const char *str)
 {
 while (*str)
 {
-if (*str != ' ')
+if (!isspace(*str))
 return (0);
 str++;
 }
@@ -18,57 +18,60 @@ return (1);
 }
 
 /**
- * main - Entry point of the shell
- * Return: 0 on success
+ * main - write a UNIX command line interpreter
+ * @argc: number of argument
+ * @argv: contain the name of programm
+ * Return: Always 0
  */
-int main(void)
+int main(__attribute__((unused)) int argc, char *argv[])
 {
-char *line = NULL;
+int nbr_command = 0;
+char *line = NULL, **array_command = NULL;
 size_t len = 0;
 ssize_t read;
-char **args;
 
 while (1)
 {
 if (isatty(STDIN_FILENO))
-{
 printf("($) ");
-fflush(stdout);
-}
 
+nbr_command++;
 read = getline(&line, &len, stdin);
+
 if (read == -1)
 {
+if (feof(stdin))
+{
 if (isatty(STDIN_FILENO))
-write(STDOUT_FILENO, "\n", 1);
+printf("\n");
+fflush(stdout);
 break;
 }
 
-if (read > 0 && line[read - 1] == '\n')
-line[read - 1] = '\0';
+perror(argv[0]);
+free(line);
+continue;
+}
 
+line[read - 1] = '\0';
 if (line[0] == '\0' || spacesCheck(line))
 continue;
 
-if (_strcmp(line, "exit") == 0)
+if (strcmp(line, "exit") == 0)
 break;
 
-if (_strcmp(line, "env") == 0)
+array_command = get_argument(line);
+if (array_command[0] == NULL)
+
 {
-print_env();
+free_args(array_command);
 continue;
 }
 
-args = parse_input(line);
-if (args[0] != NULL)
-execute_command(args, line);
-
-free(args);
-
+execute_command(array_command, nbr_command);
+free_args(array_command);
 }
 
 free(line);
-
 return (0);
-
 }
