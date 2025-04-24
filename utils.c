@@ -61,7 +61,11 @@ exit(0);
 
 if (strcmp(args[0], "env") == 0)
 {
-print_env();
+char **env;
+for (env = environ; *env != NULL; env++)
+{
+printf("%s\n", *env);
+}
 free_args(args);
 return (1);
 }

@@ -27,9 +27,8 @@ free(array_command);
 char **get_argument(char *input)
 {
 char *token;
-unsigned int i = 0;
-char *path;
 char **args = malloc(sizeof(char *) * MAX_ARGS);
+int i = 0;
 
 if (args == NULL)
 {
@@ -52,31 +51,5 @@ i++;
 }
 args[i] = NULL;
 
-if (args[0] == NULL)
-_exit(0);
-
-if (strcmp(args[0], "env") == 0)
-{
-print_env();
-return;
+return (args);
 }
-
-if (strcmp(args[0], "exit") == 0 && args[1] == NULL)
-{
-free(args[0]);
-_exit(0);
-}
-
-path = handle_path(args[0]);
-if (path != NULL)
-{
-execve(path, args, environ);
-free(path);
-}
-else
-{
-fprintf(stderr, "./hsh: 1: %s: not found\n", args[0]);
-_exit(127);
-}
-}
-

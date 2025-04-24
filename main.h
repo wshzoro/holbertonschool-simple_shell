@@ -3,22 +3,28 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
 #include <sys/wait.h>
-
+#include <sys/stat.h>
+#include <ctype.h>
 
 extern char **environ;
 
+char *genv(const char *name);
 void _err(char *args[]);
+void execute_command(char **array_command, int nbr_command);
+int spacesCheck(const char *str);
+int main(__attribute__((unused)) int argc, char *argv[]);
+char *gpath(char *input);
 void display_prompt(void);
-void tokenize(char *input, char *args[]);
-char **parse_input(char *input);
+char **get_argument(char *input);
+void free_args(char **array_command);
+char **get_argument(char *input);
 int _strcmp(const char *s1, const char *s2);
-void execute_command(char **args, char *input);
-void print_env(void);
-char *handle_path(char *input);
-
+char **parse_input(char *input);
+int handle_builtin(char **args);
 
 
 #endif

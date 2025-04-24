@@ -1,6 +1,4 @@
 #include "main.h"
-#include <sys/wait.h>
-
 /**
  * _err - handles command not found errors
  * @args: arguments to check
@@ -14,38 +12,37 @@ exit(98);
 }
 
 /**
- * execute_command - Executes the command entered by the user.
- * @args: The command arguments.
- * @input: original input string
+ * execute_command - Executes a command in a child process
+ * @array_command: An array of command arguments
+ * @nbr_command: The index of the command for error printing
  */
-void execute_command(char **args, char *input)
+void execute_command(char **array_command, int nbr_command)
 {
-pid_t childPid;
-int status;
+pid_t pid;
+char *command_path;
 
-childPid = fork();
-
-if (childPid == -1)
+pid = fork();
+if (pid == -1)
 {
 perror("fork");
-free(input);
-exit(EXIT_FAILURE);
+return;
 }
 
-if (childPid == 0)
+if (pid == 0)
 {
-if (execve(args[0], args, environ) == -1)
+command_path = gpath(array_command[0]);
+if (command_path == NULL)
 {
-_err(args);
+fprintf(stderr, "./shell: %d: %s: not found\n",
+nbr_command, array_command[0]);
+free_args(array_command);
+exit(EXIT_FAILURE);
 }
+execve(command_path, array_command, environ);
+perror("execve");
+free_args(array_command);
 exit(EXIT_FAILURE);
 }
 else
-{
-waitpid(childPid, &status, 0);
-}
-if (args[0] && args[0] != NULL)
-{
-free(args[0]);
-}
+wait(NULL);
 }

@@ -1,49 +1,60 @@
 #include "main.h"
+#include <sys/stat.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 /**
- * handle_path - Finds the path of the command to execute
+ * path - Finds the path of the command to execute
  * @input: User input
  * Return: The
  */
-char *handle_path(char *input)
+char *gpath(char *input)
 {
-char *token, *result;
-int i = 0;
+char *path;
+int length_input;
+char *token, *tmp, *file_path;
+struct stat st;
 
-if (strchr(input, '/'))
-return (strdup(input));
+if (input == NULL)
+exit(EXIT_FAILURE);
 
-while (environ[i] != NULL)
+length_input = strlen(input);
+if (strstr(input, "/") == NULL)
 {
-if (strncmp(environ[i], "PATH=", 5) == 0)
-{
-char *path_copy = strdup(environ[i] + 5);
-if (!path_copy)
+path = genv("PATH");
+if (!path)
 return (NULL);
 
-token = strtok(path_copy, ":");
+tmp = malloc(strlen(path) + 1);
+if (tmp == NULL)
+perror("malloc"), exit(EXIT_FAILURE);
+strcpy(tmp, path);
+
+token = strtok(tmp, ":");
 while (token)
 {
-result = malloc(strlen(token) + strlen(input) + 2);
-if (!result)
+file_path = malloc(length_input + strlen(token) + 2);
+if (file_path == NULL)
 {
-perror("Malloc failed");
-free(path_copy);
-return (NULL);
+				free(tmp);
+perror("malloc"), exit(EXIT_FAILURE);
 }
 
-sprintf(result, "%s/%s", token, input);
-if (access(result, X_OK) == 0)
+sprintf(file_path, "%s/%s", token, input);
+
+if (stat(file_path, &st) == 0)
 {
-free(path_copy);
-return (result);
+free(tmp);
+return (file_path);
 }
 
-free(result);
+free(file_path);
 token = strtok(NULL, ":");
 }
-free(path_copy);
-}
-i++;
-}
+free(tmp);
 return (NULL);
+}
+
+return (input);
 }
