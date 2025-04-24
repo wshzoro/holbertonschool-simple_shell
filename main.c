@@ -55,7 +55,7 @@ continue;
 args = parse_input(line);
 if (!args || args[0] == NULL)
 {
-ree_args(args);
+free_args(args);
 continue;
 }
 
