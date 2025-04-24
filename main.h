@@ -14,7 +14,8 @@ extern char **environ;
 
 char *genv(const char *name);
 void _err(char *args[]);
-void execute_command(char **array_command, int nbr_command);
+void execute_command(char **array_command,
+int nbr_command, char *program_name);
 int spacesCheck(const char *str);
 int main(__attribute__((unused)) int argc, char *argv[]);
 char *gpath(char *input);

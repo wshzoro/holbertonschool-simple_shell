@@ -61,7 +61,7 @@ free_args(array_command);
 continue;
 }
 
-execute_command(array_command, nbr_command);
+execute_command(array_command, nbr_command, argv[0]);
 free_args(array_command);
 }
 
