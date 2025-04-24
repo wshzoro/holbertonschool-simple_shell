@@ -26,6 +26,7 @@ char **get_argument(char *input);
 int _strcmp(const char *s1, const char *s2);
 char **parse_input(char *input);
 int handle_builtin(char **args);
-
+void print_env(void);
+char *str_dup(const char *s);
 
 #endif

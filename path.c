@@ -1,44 +1,79 @@
 #include "main.h"
-#include <sys/stat.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
+#include <sys/stat.h>
 #include <stdio.h>
-#include <unistd.h>
+
 /**
- * path - Finds the path of the command to execute
- * @input: User input
- * Return: The
+ * str_dup - Duplicates a string (custom implementation of strdup)
+ * @s: The string to duplicate
+ * Return: A pointer to the duplicated string, or NULL on failure
+ */
+char *str_dup(const char *s)
+{
+char *copy;
+int i, len = strlen(s);
+
+copy = malloc(len + 1);
+if (!copy)
+return (NULL);
+
+for (i = 0; i < len; i++)
+copy[i] = s[i];
+copy[i] = '\0';
+
+return copy;
+}
+
+/**
+ * gpath - Resolve the full path of a command using the PATH environment variable
+ * @input: The command entered by the user (e.g., "ls")
+ *
+ * Return: A pointer to a string with the full path of the command (must be freed),
+ *         or NULL if the command is not found.
  */
 char *gpath(char *input)
 {
-char *path;
+char *path, *token, *tmp, *file_path;
 int length_input;
-char *token, *tmp, *file_path;
 struct stat st;
 
 if (input == NULL)
-exit(EXIT_FAILURE);
+return (NULL);
 
-length_input = strlen(input);
-if (strstr(input, "/") == NULL)
+
+if (strchr(input, '/'))
 {
-path = genv("PATH");
+if (stat(input, &st) == 0)
+return (str_dup(input));
+return (NULL);
+}
+
+
+path = getenv("PATH");
 if (!path)
 return (NULL);
 
-tmp = malloc(strlen(path) + 1);
-if (tmp == NULL)
-perror("malloc"), exit(EXIT_FAILURE);
-strcpy(tmp, path);
 
+tmp = str_dup(path);
+if (!tmp)
+{
+perror("malloc");
+return (NULL);
+}
+
+length_input = strlen(input);
 token = strtok(tmp, ":");
+
+
 while (token)
 {
-file_path = malloc(length_input + strlen(token) + 2);
-if (file_path == NULL)
+file_path = malloc(strlen(token) + length_input + 2);
+if (!file_path)
 {
-				free(tmp);
-perror("malloc"), exit(EXIT_FAILURE);
+perror("malloc");
+free(tmp);
+return (NULL);
 }
 
 sprintf(file_path, "%s/%s", token, input);
@@ -52,9 +87,8 @@ return (file_path);
 free(file_path);
 token = strtok(NULL, ":");
 }
+
 free(tmp);
 return (NULL);
 }
 
-return (input);
-}
