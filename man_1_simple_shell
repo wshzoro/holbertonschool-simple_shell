@@ -1,0 +1,47 @@
+NAME  
+     hsh – simple UNIX command line interpreter
+
+SYNOPSIS  
+     hsh
+
+DESCRIPTION  
+     hsh is a basic UNIX shell written in C. It reads input from standard input and executes commands similarly to /bin/sh.
+
+     The shell supports the following features:
+     - Execution of command-line programs found in the PATH
+     - Built-in commands: exit, env
+     - Parsing of input into arguments
+     - Handling of invalid commands with proper error formatting
+
+BUILTINS  
+     The following built-in commands are supported:
+
+     exit  
+          Exit the shell.
+
+     env  
+          Display the current environment variables.
+
+RETURN VALUES  
+     Returns 0 on success. If a command is not found, an error message is printed and the program exits with status 127.
+
+USAGE EXAMPLES  
+     $ ./hsh  
+     ($) ls  
+     file1.c  file2.c  README.md  
+     ($) env  
+     PATH=/usr/bin:/bin  
+     HOME=/home/user  
+     ($) qwerty  
+     ./hsh: 1: qwerty: not found  
+     ($) exit  
+
+FILES  
+     main.c              – Entry point of the shell  
+     exe.c               – Command execution logic  
+     token.c             – Argument parsing and memory handling  
+     path.c              – PATH resolution  
+     env.c               – Environment variable handling  
+     utils.c             – Utility functions  
+     prompt.c            – Prompt display  
+     main.h              – Header file with declarations  
