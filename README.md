@@ -4,6 +4,7 @@ Simple Shell
 Table of contents
 Description of the project
 
+Flowcharts
 Main files
 Other files containing functions
 Compilation
@@ -13,6 +14,9 @@ Authors
 
 Description of the project:
 This is a simple UNIX shell implementation written in C. The shell provides a command-line interface for users to execute commands, similar to the standard UNIX shell. It supports basic command execution, including commands with arguments and searching for executable files in the system's PATH. The shell also handles built-in commands such as exit and env.
+
+Flocharts: 
+![431f2618-bdb4-45b5-b23b-3057cb2384f4](https://github.com/user-attachments/assets/03ea5c12-9d14-4b43-9fd9-1d3659c41907)
 
 Main files:
 main.h: Header file containing function prototypes and necessary include statements.
