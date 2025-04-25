@@ -9,7 +9,6 @@ Other files containing functions
 Compilation
 Examples
 Requirements
-Man Simple Shell
 Authors
 
 Description of the project:
@@ -111,12 +110,6 @@ A README.md file (this one!).
 No more than 5 functions per file.
 
 Push the header file (main.h) containing the prototypes of all functions.
-
-Man Simple Shell:
-bash
-Copier
-Modifier
-.TH SIMPLE_SHELL 1 "April 2025" "Version 1.0"
 
 .SH NAME
 simple_shell \- a simple UNIX command line interpreter
