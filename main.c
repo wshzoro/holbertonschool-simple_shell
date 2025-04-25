@@ -24,48 +24,53 @@ return (1);
  * @argv: array containing program name and arguments
  * Return: Always 0
  */
-int main(__attribute__((unused)) int argc, __attribute__((unused)) char *argv[])
+int main(__attribute__((unused)) int argc, char *argv[])
 {
-int nbr_command = 0;
-char *line = NULL, **array_command = NULL;
+char *line = NULL;
 size_t len = 0;
 ssize_t read;
+char **args = NULL;
+int command_count = 0;
 
 while (1)
 {
 if (isatty(STDIN_FILENO))
 printf("($) ");
 
-nbr_command++;
 read = getline(&line, &len, stdin);
-
 if (read == -1)
 {
 if (isatty(STDIN_FILENO))
-printf("\n");
-fflush(stdout);
+putchar('\n');
 break;
 }
 
+
+if (line[read - 1] == '\n')
 line[read - 1] = '\0';
+
 if (line[0] == '\0' || spacesCheck(line))
 continue;
 
-if (strcmp(line, "exit") == 0)
-break;
-
-array_command = get_argument(line);
-if (array_command[0] == NULL)
+args = parse_input(line);
+if (!args || args[0] == NULL)
 {
-free_args(array_command);
+free_args(args);
 continue;
 }
 
-execute_command(array_command, nbr_command, argv[0]);
-free_args(array_command);
+
+if (handle_builtin(args))
+{
+free_args(args);
+continue;
+}
+
+command_count++;
+execute_command(args, command_count, argv[0]);
+free_args(args);
 }
 
 free(line);
-
 return (0);
 }
