@@ -2,7 +2,7 @@
 
 /**
 * print_env - print the environment
- */
+*/
 
 void print_env(void)
 {
